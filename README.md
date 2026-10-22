@@ -1,28 +1,50 @@
-# Weather App
+# Weather
 
-## Description 
-A plain application with the open weather app API implementation, given the opportunity to recheck 
-the most important weather details about a certain city, with a clean UI for a solid UX. 
+A small web app that shows the current weather for any city through the OpenWeather API.
 
-## Tech stack
-- Java Script
-- HTML
-- CSS 
-- Open Weather API 
+![Screenshot of Weather](docs/screenshot.png)
 
 ## Features
-- Responsive website
-- Adaptive to phone devices
-- Open Weather API
 
-## What I've learned 
-- I solidfied HTML/CSS knowledge
-- On how to make code more structured and build a better overview
-- On how to work with boolean switch/true linked with cases
-- Generate new HTML elements in a certain container
-- To link those elements with the fitting CSS styling
+- Search by city name
+- Temperature in °C, humidity, description and a matching emoji
+- Clear error messages for empty input and unknown cities
+- Responsive layout
 
+## Tech
 
+- HTML, CSS, vanilla JavaScript
+- `fetch` with `async`/`await`
+- OpenWeather Current Weather API
 
-<img width="1470" height="830" alt="Screenshot 2026-01-20 at 22 45 57" src="https://github.com/user-attachments/assets/3c14bb9f-6694-4da2-b2d1-292f5e00c28f" />
+## How to run
 
+Open the live version: **[aaronkuy.github.io/weather](https://aaronkuy.github.io/weather/)**
+
+Or run it locally. There is no build step and no dependency:
+
+```bash
+git clone https://github.com/aaronkuy/weather.git
+cd weather
+open index.html        # macOS; on Linux use xdg-open, on Windows start
+```
+
+## What I learned
+
+- Calling an API and checking `response.ok` before using the data
+- Destructuring nested JSON
+- Creating and styling DOM elements from JavaScript
+
+## What I'd do next
+
+- Request metric units from the API instead of converting Kelvin
+- Use the user's location as a default
+- A five-day forecast
+
+## Notes
+
+The API key is client-side by design of this exercise; it will be rotated and restricted.
+
+## License
+
+See [LICENSE](LICENSE).
