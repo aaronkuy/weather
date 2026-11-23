@@ -2,7 +2,7 @@
 
 A small web app that shows the current weather for any city. Weather data by [Open-Meteo.com](https://open-meteo.com/).
 
-![Screenshot of Weather](docs/screenshot.png)
+![The app showing the current weather in Berlin](docs/weather-berlin.png)
 
 ## Features
 
