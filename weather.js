@@ -46,7 +46,7 @@ const ERROR_MESSAGES = {
     unknown: "Something went wrong. Please try again.",
 };
 
-// An error the user can do something about. `kind` is a key of ERROR_MESSAGES.
+// An outcome the page has a sentence for. `kind` is a key of ERROR_MESSAGES.
 class WeatherError extends Error {
     constructor(kind) {
         super(ERROR_MESSAGES[kind]);
@@ -125,16 +125,10 @@ function formatPlace(name, country) {
     return country ? `${name}, ${country}` : name;
 }
 
+// Everything that is not a WeatherError is unexpected. In particular a TypeError
+// is not taken for a network failure: fetchJson() in index.js names those itself.
 function getErrorMessage(error) {
-    if (error instanceof WeatherError) {
-        return error.message;
-    }
-    // fetch() rejects with a TypeError when the request never got an answer,
-    // and AbortSignal.timeout() aborts it with a TimeoutError.
-    if (error instanceof TypeError || error?.name === "TimeoutError" || error?.name === "AbortError") {
-        return ERROR_MESSAGES.network;
-    }
-    return ERROR_MESSAGES.unknown;
+    return error instanceof WeatherError ? error.message : ERROR_MESSAGES.unknown;
 }
 
 if (typeof module !== "undefined") {
