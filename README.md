@@ -59,8 +59,8 @@ The same command runs on every pull request and on every push to `main` (`.githu
 
 ## Credits
 
-- This project started from Bro Code's tutorial [Create a weather app with JavaScript!](https://www.youtube.com/watch?v=VaDUGPMjzOM). The form handler and the functions `getWeatherData`, `displayWeatherInfo`, `getWeatherEmoji` and `displayError` follow that video.
-- Different from the tutorial: the data source (Open-Meteo instead of OpenWeather), the error handling, `weather.js` with its tests, and the page styling.
+- This project started from Bro Code's tutorial [Create a weather app with JavaScript!](https://www.youtube.com/watch?v=VaDUGPMjzOM). The structure of the script comes from that video: a form handler and the functions `getWeatherData`, `displayWeatherInfo`, `getWeatherEmoji` and `displayError`.
+- Different from the tutorial: the data source (Open-Meteo instead of OpenWeather), the error handling, the weather code table, `weather.js` with its tests, and the page styling.
 - Weather data by [Open-Meteo.com](https://open-meteo.com/), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 ## License
