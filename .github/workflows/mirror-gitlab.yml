@@ -1,0 +1,51 @@
+name: Mirror to GitLab
+
+# Pushes every branch and tag to the read-only copy at
+# https://gitlab.com/aaronkuyucu/weather. GitLab Free has no pull
+# mirroring, so GitHub pushes instead.
+on:
+  push:
+    branches: ['**']
+    tags: ['**']
+  delete:
+  schedule:
+    # Hourly, so branches that do not contain this file are mirrored too.
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One mirror run at a time; a newer run waits instead of racing an older one.
+concurrency:
+  group: mirror-gitlab
+  cancel-in-progress: false
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Clone from GitHub
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git clone --mirror \
+            "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" repo.git
+          # Pull request refs are GitHub-internal and are not mirrored.
+          git -C repo.git for-each-ref --format='delete %(refname)' refs/pull | \
+            git -C repo.git update-ref --stdin
+
+      - name: Push to GitLab
+        env:
+          GITLAB_MIRROR_KEY: ${{ secrets.GITLAB_MIRROR_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$GITLAB_MIRROR_KEY" > ~/.ssh/gitlab_mirror
+          chmod 600 ~/.ssh/gitlab_mirror
+          ssh-keyscan -t ed25519 gitlab.com > ~/.ssh/known_hosts 2>/dev/null
+          export GIT_SSH_COMMAND="ssh -i ~/.ssh/gitlab_mirror -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes"
+          # --prune removes branches and tags that no longer exist on GitHub;
+          # + allows rewritten branches to follow.
+          git -C repo.git push --prune git@gitlab.com:aaronkuyucu/weather.git \
+            '+refs/heads/*:refs/heads/*' '+refs/tags/*:refs/tags/*'
