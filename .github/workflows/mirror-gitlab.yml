@@ -43,7 +43,12 @@ jobs:
           install -m 700 -d ~/.ssh
           printf '%s\n' "$GITLAB_MIRROR_KEY" > ~/.ssh/gitlab_mirror
           chmod 600 ~/.ssh/gitlab_mirror
-          ssh-keyscan -t ed25519 gitlab.com > ~/.ssh/known_hosts 2>/dev/null
+          # GitLab's published ED25519 host key
+          # (SHA256:eUXGGm1YGsMAS7vkcx6JOJdOGHPem5gQp4taiCfCLB8, see
+          # https://docs.gitlab.com/user/gitlab_com/#ssh-known_hosts-entries).
+          # Pinned instead of scanned, so a spoofed host is rejected.
+          echo 'gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf' \
+            > ~/.ssh/known_hosts
           export GIT_SSH_COMMAND="ssh -i ~/.ssh/gitlab_mirror -o IdentitiesOnly=yes -o StrictHostKeyChecking=yes"
           # --prune removes branches and tags that no longer exist on GitHub;
           # + allows rewritten branches to follow.
