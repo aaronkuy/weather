@@ -143,15 +143,18 @@ test("place name works with and without a country", () => {
 });
 
 test("error messages are sentences, never error objects", () => {
-    assert.equal(getErrorMessage(new WeatherError("not-found")), ERROR_MESSAGES["not-found"]);
-    assert.equal(getErrorMessage(new WeatherError("service")), ERROR_MESSAGES.service);
-    assert.equal(getErrorMessage(new TypeError("Failed to fetch")), ERROR_MESSAGES.network);
-    const timeout = new Error("signal timed out");
-    timeout.name = "TimeoutError";
-    assert.equal(getErrorMessage(timeout), ERROR_MESSAGES.network);
-    assert.equal(getErrorMessage(new RangeError("x")), ERROR_MESSAGES.unknown);
-    assert.equal(getErrorMessage(undefined), ERROR_MESSAGES.unknown);
+    for (const kind of ["not-found", "service", "network"]) {
+        assert.equal(getErrorMessage(new WeatherError(kind)), ERROR_MESSAGES[kind]);
+    }
     for (const message of Object.values(ERROR_MESSAGES)) {
         assert.match(message, /^[A-Z].*\.$/);
     }
+});
+
+test("an error from the page's own code is not reported as a lost connection", () => {
+    // fetch() rejects with a TypeError too, so the type alone must not decide.
+    const bug = new TypeError("Cannot read properties of undefined (reading 'name')");
+    assert.equal(getErrorMessage(bug), ERROR_MESSAGES.unknown);
+    assert.equal(getErrorMessage(new RangeError("x")), ERROR_MESSAGES.unknown);
+    assert.equal(getErrorMessage(undefined), ERROR_MESSAGES.unknown);
 });

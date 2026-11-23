@@ -24,7 +24,7 @@ weatherForm.addEventListener("submit", async event => {
         const weatherData = await getWeatherData(city);
         displayWeatherInfo(weatherData);
     } catch (error) {
-        // "City not found" is an expected outcome; anything else is worth a log entry.
+        // A WeatherError is an expected outcome; anything else is a bug and worth a log entry.
         if (!(error instanceof WeatherError)) {
             console.error(error);
         }
@@ -46,14 +46,26 @@ async function getWeatherData(city) {
 }
 
 async function fetchJson(url) {
-    // Without a timeout a hanging request would leave the button disabled for good.
-    const response = await fetch(url, { signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
+    let response;
+    try {
+        // Without a timeout a hanging request would leave the button disabled for good.
+        response = await fetch(url, { signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
+    } catch {
+        // fetch() rejects only when no answer arrived: offline, DNS failure, timeout.
+        // Naming that here keeps a TypeError from a bug elsewhere from looking like one.
+        throw new WeatherError("network");
+    }
     // Both APIs answer 400 for bad parameters and 429 above the rate limit.
     // Neither is something the user can fix by typing another city.
     if (!response.ok) {
         throw new WeatherError("service");
     }
-    return response.json();
+    try {
+        return await response.json();
+    } catch (error) {
+        // The timeout also covers the body; anything else here is an answer that is not JSON.
+        throw new WeatherError(error?.name === "TimeoutError" ? "network" : "service");
+    }
 }
 
 function displayWeatherInfo(data) {
