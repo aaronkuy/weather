@@ -5,36 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
     <link rel="stylesheet" href="style.css">
+    <script src="weather.js" defer></script>
     <script src="index.js" defer></script>
 </head>
 
 <body>
 <header class="hero">
     <h1>Weather</h1>
-    <p class="tagline">Current weather for any city via the OpenWeather API.</p>
+    <p class="tagline">Current weather for any city.</p>
 </header>
 
 <form class="weather-form">
-    <input type="text" class="cityInput" placeholder="Enter city">
+    <input type="text" class="cityInput" placeholder="Enter city" aria-label="City" autocomplete="off">
     <button type="submit">Get Weather</button>
 </form>
 
-<div class="card">
-    <h1 class="cityDisplay"></h1>
-    <p class="tempDisplay"></p>
-    <p class="humidityDisplay"></p>
-    <p class="descDisplay"></p>
-    <p class="weatherEmoji">️</p>
-    <p class="errorDisplay">Please enter the city</p>
-</div>
+<section class="card" aria-live="polite" hidden></section>
 
 <footer class="footer">
-    Built by <a href="https://github.com/aaronkuy">Aaron Kuyucu</a> · <a href="https://github.com/aaronkuy/weather">Source on GitHub</a>
+    <a href="https://open-meteo.com/">Weather data by Open-Meteo.com</a> · <a href="https://github.com/aaronkuy/weather">Source on GitHub</a>
 </footer>
-
-
-
-
-
 </body>
 </html>
