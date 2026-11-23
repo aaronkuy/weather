@@ -2,14 +2,14 @@
     --bg: #f4f5f9;
     --card: #ffffff;
     --ink: #14161c;
-    --muted: #6b7280;
+    --muted: #5b6270;
     --line: #e4e6ee;
+    --field-line: #858b9a;
     --accent: #4f46e5;
     --accent-hover: #4338ca;
     --accent-soft: #eef0ff;
-    --danger: #e5484d;
-    --danger-soft: #fff1f1;
-    --radius: 14px;
+    --on-accent: #ffffff;
+    --danger: #c8323a;
     --shadow: 0 1px 2px rgba(20, 22, 28, 0.04), 0 8px 24px rgba(20, 22, 28, 0.06);
 }
 
@@ -22,6 +22,8 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    padding: 0 20px;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     line-height: 1.5;
     color: var(--ink);
@@ -32,28 +34,6 @@ body {
 
 button {
     font: inherit;
-}
-
-.footer {
-    margin-top: auto;
-    padding: 24px 20px 32px;
-    text-align: center;
-    font-size: 0.85rem;
-    color: var(--muted);
-}
-
-.footer a {
-    color: inherit;
-    text-underline-offset: 3px;
-}
-
-.footer a:hover {
-    color: var(--ink);
-}
-
-body {
-    align-items: center;
-    padding: 0 20px;
 }
 
 /* Header */
@@ -85,15 +65,16 @@ body {
     margin-bottom: 28px;
     padding: 6px;
     background: var(--card);
-    border: 1px solid var(--line);
+    /* 3:1 against the page, so the field can be found without the placeholder. */
+    border: 1px solid var(--field-line);
     border-radius: 999px;
     box-shadow: var(--shadow);
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.weather-form:focus-within {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.14), var(--shadow);
+/* The input has no outline of its own; the whole pill shows the focus instead. */
+.weather-form:has(.cityInput:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
 
 .cityInput {
@@ -109,7 +90,7 @@ body {
 }
 
 .cityInput::placeholder {
-    color: #9aa0ad;
+    color: var(--muted);
 }
 
 button[type="submit"] {
@@ -117,7 +98,7 @@ button[type="submit"] {
     border: 0;
     border-radius: 999px;
     background: var(--accent);
-    color: #ffffff;
+    color: var(--on-accent);
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s ease, transform 0.08s ease;
@@ -125,6 +106,11 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
     background: var(--accent-hover);
+}
+
+button[type="submit"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
 
 button[type="submit"]:active {
@@ -197,6 +183,24 @@ button[type="submit"]:disabled {
     margin: 0;
     color: var(--danger);
     font-weight: 600;
+}
+
+/* Footer */
+.footer {
+    margin-top: auto;
+    padding: 24px 20px 32px;
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.footer a {
+    color: inherit;
+    text-underline-offset: 3px;
+}
+
+.footer a:hover {
+    color: var(--ink);
 }
 
 @media (max-width: 520px) {
